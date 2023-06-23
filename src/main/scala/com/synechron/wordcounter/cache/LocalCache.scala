@@ -1,15 +1,10 @@
 package com.synechron.wordcounter.cache
 
-trait LocalCache {
+import com.synechron.wordcounter.util.Translator
 
-  /**
-   * Add a word to the cache
-   * @param word
-   *    word to be added to the cache
-   * @return
-   *    count of the word after added
-   */
-  def addToCache(word: String): Long
+import java.util.concurrent.ConcurrentHashMap
+
+trait LocalCache {
 
   /**
    * Get count for a given word from the cache
@@ -19,4 +14,13 @@ trait LocalCache {
    *    count of the given word, return 0 if not presented
    */
   def getCount(word: String): Long
+
+  /**
+   * Add a grouped map with word and its count to the cache
+   * @param map
+   * @param translator
+   */
+  def addToCache(map: Map[String,Long], translator: Translator): Unit
+
+  def getMap(): ConcurrentHashMap[String,ValueItem]
 }
