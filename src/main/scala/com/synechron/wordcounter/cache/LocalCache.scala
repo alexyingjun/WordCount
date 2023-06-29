@@ -1,7 +1,5 @@
 package com.synechron.wordcounter.cache
 
-import com.synechron.wordcounter.util.Translator
-
 import java.util.concurrent.ConcurrentHashMap
 
 trait LocalCache {
@@ -20,7 +18,7 @@ trait LocalCache {
    * @param map
    * @param translator
    */
-  def addToCache(map: Map[String,Long], translator: Translator): Unit
+  def addToCache(map: Map[String,Long]): Unit
 
   def getMap(): ConcurrentHashMap[String,ValueItem]
 }

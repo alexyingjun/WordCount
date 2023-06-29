@@ -1,4 +1,4 @@
 package com.synechron.wordcounter.cache
 
-case class ValueItem(@volatile var value:Long)
+case class ValueItem(var value:Long)
 

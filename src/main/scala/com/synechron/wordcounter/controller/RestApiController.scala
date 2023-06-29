@@ -1,13 +1,13 @@
 package com.synechron.wordcounter.controller
 
 import cask._
+import com.synechron.wordcounter.cache.WordCountCache
 import com.synechron.wordcounter.core.WordCounterImpl
-import com.synechron.wordcounter.util.Translator
 
 
 object RestApiController extends MainRoutes{
 
-  private val wordCounter = new WordCounterImpl(new Translator)
+  private val wordCounter = new WordCounterImpl
 
   @get("/")
   def healthCheck() = "Welcome to word counter service"
@@ -16,7 +16,8 @@ object RestApiController extends MainRoutes{
   def getWordCount(word: String): Long = wordCounter.getCountOfWord(word)
 
   @postJson("/add")
-  def addWords(words: Seq[String]): Unit = wordCounter.addWords(words: _*)
+  def addWords(words: Seq[String]): Unit = wordCounter.add(words: _*)
 
   initialize()
+  WordCountCache.init()
 }
