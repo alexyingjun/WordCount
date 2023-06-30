@@ -1,9 +1,7 @@
 package com.synechron.wordcounter.core
 
-import com.synechron.wordcounter.cache.{LocalCache, WordCountCache}
-import com.synechron.wordcounter.validator.{Validator, WordValidator}
+import com.synechron.wordcounter.core.flow.WordCounterFlow
 
-class WordCounterImpl extends WordCounter {
-  override protected def validator: Validator = WordValidator
-  override protected def localCache: LocalCache = WordCountCache
+
+class WordCounterImpl(processFlow: WordCounterFlow) extends WordCounter(processFlow: WordCounterFlow) {
 }

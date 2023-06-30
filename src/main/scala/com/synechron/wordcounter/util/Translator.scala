@@ -1,5 +1,5 @@
 package com.synechron.wordcounter.util
 
-class Translator {
+case class Translator() {
   def translate(word: String) : String = word
 }

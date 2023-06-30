@@ -1,4 +1,4 @@
-package com.synechron.wordcounter.validator
+package com.synechron.wordcounter.core.flow.validator
 
 trait Validator {
 

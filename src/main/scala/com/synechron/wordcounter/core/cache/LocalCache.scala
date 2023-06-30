@@ -1,4 +1,4 @@
-package com.synechron.wordcounter.cache
+package com.synechron.wordcounter.core.cache
 
 import java.util.concurrent.ConcurrentHashMap
 
