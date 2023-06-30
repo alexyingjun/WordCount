@@ -1,6 +1,6 @@
-package com.synechron.wordcounter.validator
+package com.synechron.wordcounter.core.flow.validator
 
-object WordValidator extends Validator {
+case class WordValidator() extends Validator {
   /**
    * Validate a single word
    *
