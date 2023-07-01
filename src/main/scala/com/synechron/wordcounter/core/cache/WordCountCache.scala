@@ -1,16 +1,29 @@
 package com.synechron.wordcounter.core.cache
 
-import com.synechron.wordcounter.core.flow.validator.{Validator, WordValidator}
+import com.synechron.wordcounter.core.cache.WordCountCache.{translator, wordCountMap}
+import com.synechron.wordcounter.core.flow.regulator.validator.{Validator, WordValidator}
 import com.synechron.wordcounter.util.Translator
-import java.util.concurrent.{ConcurrentHashMap}
 
+import java.util.concurrent.ConcurrentHashMap
+
+/**
+ * WordCount object to hold hashmap as a cache/storage and default translator
+ */
 object WordCountCache {
   private val wordCountMap: ConcurrentHashMap[String, ValueItem] = new ConcurrentHashMap[String, ValueItem]()
   var translator:Translator = new Translator
 }
+
+/**
+ * WordCount object's companion class
+ */
 class WordCountCache extends LocalCache {
   private val validator: Validator = new WordValidator
-  private val wordCountMap = WordCountCache.wordCountMap
+
+  /**
+   * Set to a designated translator, mainly for testing
+   * @param translator
+   */
   def setTranslator(translator: Translator):Unit = WordCountCache.translator = translator
 
   /**
@@ -21,36 +34,42 @@ class WordCountCache extends LocalCache {
    * @return
    * count of the given word, return 0 if not presented
    */
-  override def getCount(word: String): Long = {
-    println("Get count for "+word)
-    println("Current map => "+wordCountMap)
-    if(wordCountMap.containsKey(word)) println("Current map has count for "+word)
-    else println("Current map has no count for "+word)
-    val count = wordCountMap.getOrDefault(word, ValueItem(0)).value
-    println("Got count "+count)
-    count
-  }
+  override def getCount(word: String): Long = wordCountMap.getOrDefault(word, ValueItem(0)).value
 
+  /**
+   * private method to translate the word and add to map
+   * @param word
+   *    lowercase input word
+   * @param count
+   *    count of the word in the input
+   */
   private def translateAndAdd(word: String, count: Long): Unit = {
     try {
-      val englishWord = WordCountCache.translator.translate(word)
-      println("Translated "+word+" to "+englishWord)
-      if(validator.validate(englishWord)) {
-        println("Translated word "+word+" is valid")
-        if (!englishWord.equalsIgnoreCase(word)) { //not a english word, not exist in map
+      val englishWord = translator.translate(word)
+      if(validator.validate(englishWord)) {   // need to validate the translated word
+        if (!englishWord.equalsIgnoreCase(word)) { //not a english word, not exist in the word count map
           val countItem = wordCountMap.getOrDefault(englishWord.toLowerCase, ValueItem(0))
           wordCountMap.putIfAbsent(englishWord.toLowerCase, countItem)
-          wordCountMap.putIfAbsent(word.toLowerCase,countItem)
+          wordCountMap.putIfAbsent(word,countItem)
         }
         doAddToMap(englishWord.toLowerCase, count)
       }else{
-        println("Translated word "+word+" is invalid")
+        println("Translated word ["+englishWord+"] from "+word+ " is invalid")
       }
     } catch {
       case _: Throwable => println("Error in add while translating word " + word)
     }
   }
 
+  /**
+   * private method actually add the input map(word,count) to the word count map
+   * @param word
+   *    input word
+   * @param count
+   *    count of the input word
+   * @return
+   *    ValueItem wrapper class after merge
+   */
   private def doAddToMap(word: String, count: Long) = {
     wordCountMap.merge(word, ValueItem(count), (a, b) => {
       a.value += b.value
@@ -58,24 +77,20 @@ class WordCountCache extends LocalCache {
     })
   }
 
+  /**
+   * override method to add the input map(word,count) to the word count map
+   * @param map
+   *    input map(word,count)
+   */
   override def addToCache(map: Map[String, Long]): Unit = {
-    val groupedMap = map.groupBy(e => wordCountMap.containsKey(e._1))
-    groupedMap.get(true) match {
-      case Some(map) => {
-        println("Add without translate ==> " + map)
-        map.foreach(e=> doAddToMap(e._1,e._2))
-      }
+    val groupedMap = map.groupBy(e => wordCountMap.containsKey(e._1))   //group input map to 2 maps
+    groupedMap.get(true) match {  // the map contains all words which already exist in the word count map
+      case Some(map) => map.foreach(e=> doAddToMap(e._1,e._2))  // straightly add the map to the word count map, no need to translate
       case None =>
     }
-    groupedMap.get(false) match {
-      case Some(map) => {
-        println("Add with translate ==> " + map);
-        map.foreach(e => translateAndAdd(e._1,e._2))
-      }
+    groupedMap.get(false) match { // the map contains all words which are new to the word count map
+      case Some(map) => map.foreach(e => translateAndAdd(e._1,e._2))  // need to translate the words first, then add to the word count map
       case None =>
     }
-    println(wordCountMap)
   }
-
-  override def getMap(): ConcurrentHashMap[String, ValueItem] = wordCountMap
 }

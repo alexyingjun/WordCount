@@ -4,7 +4,7 @@ import com.synechron.wordcounter.core.cache.WordCountCache
 import com.synechron.wordcounter.core.flow.WordCounterFlow
 import com.synechron.wordcounter.core.flow.aggregator.WordsAggregator
 import com.synechron.wordcounter.core.flow.regulator.WordRegulator
-import com.synechron.wordcounter.core.flow.validator.WordValidator
+import com.synechron.wordcounter.core.flow.regulator.validator.WordValidator
 import com.synechron.wordcounter.util.Translator
 import org.mockito.MockitoSugar
 import org.scalatest.funspec.AnyFunSpec
