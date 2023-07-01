@@ -19,6 +19,4 @@ trait LocalCache {
    * @param translator
    */
   def addToCache(map: Map[String,Long]): Unit
-
-  def getMap(): ConcurrentHashMap[String,ValueItem]
 }

@@ -6,8 +6,8 @@ import com.synechron.wordcounter.core.flow.WordCounterFlow
 
 
 object RestApiController extends MainRoutes{
-  val processFlow = new WordCounterFlow()
-  private val wordCounter = new WordCounterImpl(processFlow)
+  private val processFlow = new WordCounterFlow()
+  private val wordCounter = WordCounterImpl(processFlow)
 
   @get("/")
   def healthCheck() = "Welcome to word counter service"

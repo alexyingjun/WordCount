@@ -1,4 +1,4 @@
-package com.synechron.wordcounter.core.flow.validator
+package com.synechron.wordcounter.core.flow.regulator.validator
 
 case class WordValidator() extends Validator {
   /**
