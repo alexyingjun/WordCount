@@ -2,9 +2,6 @@ package com.synechron.wordcounter.core
 
 import com.synechron.wordcounter.core.cache.WordCountCache
 import com.synechron.wordcounter.core.flow.WordCounterFlow
-import com.synechron.wordcounter.core.flow.aggregator.WordsAggregator
-import com.synechron.wordcounter.core.flow.regulator.WordRegulator
-import com.synechron.wordcounter.core.flow.regulator.validator.WordValidator
 import com.synechron.wordcounter.util.Translator
 import org.mockito.MockitoSugar
 import org.scalatest.funspec.AnyFunSpec
@@ -15,8 +12,8 @@ import java.util.concurrent.CountDownLatch
 class WordCounterSpec extends AnyFunSpec with Matchers with MockitoSugar{
   describe("Test Word Counter feature"){
     val processFlow = new WordCounterFlow()
-    val wordCounter = new WordCounterImpl(processFlow)
-    val wordCounter2 = new WordCounterImpl(processFlow)
+    val wordCounter = WordCounterImpl(processFlow)
+    val wordCounter2 = WordCounterImpl(processFlow)
     val wordCountCache = new WordCountCache
     it("should add valid words") {
       val words = Seq("abc", "bbc", "Abc", "bcb")
@@ -42,7 +39,6 @@ class WordCounterSpec extends AnyFunSpec with Matchers with MockitoSugar{
     }
     it("should handle invalid words from translator outcome") {
       val translator = mock[Translator]
-      val addProcessFlow = WordCounterFlow(new WordsAggregator, new WordRegulator(new WordValidator))
       wordCountCache.setTranslator(translator)
       when(translator.translate("bb")).thenReturn("")
 
@@ -79,7 +75,7 @@ class WordCounterSpec extends AnyFunSpec with Matchers with MockitoSugar{
     }
     class WordCounterRunner(cl: CountDownLatch) extends Runnable {
       override def run(): Unit = {
-        val wordCounter = new WordCounterImpl(processFlow)
+        val wordCounter = WordCounterImpl(processFlow)
         val words = Seq("aaA", "BBB", "Ccc", "AAA")
         for (_ <- 0 until 1000) wordCounter.add(words: _*)
         cl.countDown()

@@ -1,7 +1,5 @@
 package com.synechron.wordcounter.core.cache
 
-import java.util.concurrent.ConcurrentHashMap
-
 trait LocalCache {
 
   /**
