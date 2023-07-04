@@ -1,8 +1,8 @@
-package com.synechron.wordcounter.main
+package com.synechron.wordcounter.demo
 
 import com.synechron.wordcounter.core.WordCounterImpl
 
-object MainApplication {
+object DemoApplication {
   def main(args: Array[String]): Unit = {
     val wordCounter = new WordCounterImpl
     val words = Seq("abc", "bbc", "Abc", "bcb")

@@ -10,6 +10,10 @@ Word Counter Service provides APIs for 2 functions:
 2. The port 8080 has to be available for the service
 3. Type run or go to the RestApiController and hit the run button to start the service
 
+## How to use the library
+
+Please refer to the DemoApplication in test folder com.synechron.wordcounter.demo
+
 ## How to make call to the API
 1. Add words
 ```
