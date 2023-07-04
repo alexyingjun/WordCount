@@ -8,4 +8,7 @@ import com.synechron.wordcounter.core.flow.WordCounterFlow
  *
  */
 case class WordCounterImpl(processFlow: WordCounterFlow) extends WordCounter(processFlow: WordCounterFlow) {
+  def this(){
+    this(new WordCounterFlow())
+  }
 }

@@ -1,7 +1,7 @@
 package com.synechron.wordcounter.controller
 
 import cask._
-import com.synechron.wordcounter.core.{WordCounterImpl}
+import com.synechron.wordcounter.core.WordCounterImpl
 import com.synechron.wordcounter.core.flow.WordCounterFlow
 
 

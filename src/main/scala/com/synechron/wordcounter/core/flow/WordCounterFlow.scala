@@ -1,12 +1,14 @@
 package com.synechron.wordcounter.core.flow
 
 import com.synechron.wordcounter.core.cache.WordCountCache
+import com.synechron.wordcounter.core.flow
 import com.synechron.wordcounter.core.flow.aggregator.WordsAggregator
 import com.synechron.wordcounter.core.flow.regulator.WordRegulator
 import com.synechron.wordcounter.core.flow.regulator.validator.WordValidator
 
 /**
  * Class to define the flow for add and get features
+ *
  * @param aggregator
  *    WordsAggregator in which defines how to aggregate the input words
  * @param regulator
@@ -18,14 +20,14 @@ case class WordCounterFlow(aggregator: WordsAggregator, regulator: WordRegulator
    * Default constructor uses default regulator and aggregator
    */
   def this() {
-    this(new WordsAggregator, WordRegulator(new WordValidator))
+    this(new WordsAggregator, flow.regulator.WordRegulator(new WordValidator))
   }
 
   /**
    * Constructor uses default regulator but designated aggregator
    */
   def this(aggregator: WordsAggregator) {
-    this(aggregator, WordRegulator(new WordValidator))
+    this(aggregator, flow.regulator.WordRegulator(new WordValidator))
   }
 
   /**
