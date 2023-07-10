@@ -27,15 +27,22 @@ class WordCounterSpec extends AnyFunSpec with Matchers with MockitoSugar{
     it("should add foreign words to the counter and filter illegal translated words") {
       val translator = mock[Translator]
       wordCountCache.setTranslator(translator)
+      processFlow.wordCountCache.setForeignWordMapCapacity(2)
       when(translator.translate("flower")).thenReturn("flower")
       when(translator.translate("flor")).thenReturn("flower")
       when(translator.translate("blume")).thenReturn("flower")
+      when(translator.translate("hua")).thenReturn("flower")
+      when(translator.translate("kkk")).thenReturn("flower")
       when(translator.translate("bla")).thenReturn("a3")
-      wordCounter.add(Seq("bla", "blume"): _*)
+      wordCounter.add(Seq("bla", "blume", "hua"): _*)
+      wordCounter.get("blume")
       wordCounter2.add(Seq("blume", "flor", "flower"): _*)
 
-      wordCounter.get("flower") shouldBe 4
-      wordCounter2.get("blume") shouldBe 4
+      wordCounter.get("flower") shouldBe 5
+      wordCounter2.get("blume") shouldBe 5
+      wordCounter.get("kkk") shouldBe 5
+      wordCounter.get("kkk") shouldBe 5
+      wordCounter.get("bla") shouldBe 0
     }
     it("should handle invalid words from translator outcome") {
       val translator = mock[Translator]

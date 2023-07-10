@@ -5,5 +5,5 @@ package com.synechron.wordcounter.core.cache
  * @param value
  *    count of a word
  */
-case class ValueItem(var value:Long)
+case class ValueItem(engWord: String, var value:Long)
 
